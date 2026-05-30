@@ -1,0 +1,36 @@
+@media(max-width:900px){
+
+.hud{
+  flex-direction:column;
+  gap:15px;
+}
+.right{
+  flex-wrap:wrap;
+}
+  
+#clickImage{
+  width:180px;
+  height:180px;
+}
+.shop{
+  height:320px;
+}
+}
+
+@media(max-width:600px){
+.left h1{
+  font-size:24px;
+}
+.right{
+  font-size:16px;
+  gap:10px;
+}
+#clickImage{
+  width:140px;
+  height:140px;
+}
+.upgrade{
+  flex-direction:column;
+  gap:10px;
+}
+}
