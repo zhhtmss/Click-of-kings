@@ -1,0 +1,70 @@
+<!DOCTYPE html>
+<html lang="uk">
+<head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+    <title>Click of Kings</title>
+
+    <link rel="stylesheet" href="css/style.css">
+    <link rel="stylesheet" href="css/animations.css">
+    <link rel="stylesheet" href="css/responsive.css">
+</head>
+
+<body>
+
+    <!-- LOADING SCREEN -->
+    <div id="loader">
+        <div class="loader-content">
+            <h1>👑 Click of Kings</h1>
+            <p>Loading kingdom...</p>
+            <div class="spinner"></div>
+        </div>
+    </div>
+
+    <!-- GAME WRAPPER -->
+    <div id="game" class="hidden">
+
+        <!-- BACKGROUND (міняється ерою через JS) -->
+        <div id="background"></div>
+
+        <!-- HUD -->
+        <header class="hud">
+            <div class="left">
+                <h1>Click of Kings</h1>
+                <span id="eraName">Loading...</span>
+            </div>
+
+            <div class="right">
+                <div>💰 <span id="resources">0</span></div>
+                <div>⚔️ <span id="perClick">1</span></div>
+                <div>🏰 <span id="autoIncome">0</span></div>
+            </div>
+        </header>
+
+        <!-- GAME AREA -->
+        <main class="game-area">
+            <button id="clickButton" class="click-button">
+                <img id="clickImage" src="assets/images/items/era1_click.webp" alt="click">
+            </button>
+        </main>
+
+        <!-- SHOP -->
+        <aside class="shop">
+            <h2>Upgrades</h2>
+            <div id="upgradesList"></div>
+        </aside>
+
+    </div>
+
+    <!-- SCRIPTS -->
+    <script src="js/loader.js"></script>
+    <script src="js/storage.js"></script>
+    <script src="js/game.js"></script>
+    <script src="js/upgrades.js"></script>
+    <script src="js/eras.js"></script>
+    <script src="js/ui.js"></script>
+    <script src="js/audio.js"></script>
+    <script src="js/main.js"></script>
+
+</body>
+</html>
