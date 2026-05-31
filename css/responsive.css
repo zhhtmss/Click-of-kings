@@ -1,36 +1,80 @@
-@media(max-width:900px){
+@media (max-width: 900px) {
+    #game {
+        min-height: 100vh;
+        height: auto;
+    }
 
-.hud{
-  flex-direction:column;
-  gap:15px;
-}
-.right{
-  flex-wrap:wrap;
-}
-  
-#clickImage{
-  width:180px;
-  height:180px;
-}
-.shop{
-  height:320px;
-}
+    .hud {
+        flex-direction: column;
+        align-items: flex-start;
+    }
+
+    .right {
+        justify-content: flex-start;
+        gap: 12px;
+    }
+
+    .game-area {
+        min-height: 520px;
+    }
+
+    .click-button {
+        width: min(250px, 64vw);
+    }
+
+    .shop {
+        height: 330px;
+    }
 }
 
-@media(max-width:600px){
-.left h1{
-  font-size:24px;
-}
-.right{
-  font-size:16px;
-  gap:10px;
-}
-#clickImage{
-  width:140px;
-  height:140px;
-}
-.upgrade{
-  flex-direction:column;
-  gap:10px;
-}
+@media (max-width: 600px) {
+    .hud {
+        padding: 14px;
+    }
+
+    .left h1 {
+        font-size: 24px;
+    }
+
+    .right {
+        width: 100%;
+        font-size: 15px;
+    }
+
+    .sound-toggle {
+        width: 100%;
+    }
+
+    .game-area {
+        gap: 18px;
+        padding: 18px 14px;
+    }
+
+    .era-panel {
+        padding: 14px;
+    }
+
+    .progress-label {
+        flex-direction: column;
+        gap: 4px;
+    }
+
+    .click-button {
+        width: min(210px, 70vw);
+    }
+
+    .shop {
+        height: auto;
+        max-height: none;
+        padding: 16px 14px;
+    }
+
+    .upgrade {
+        flex-direction: column;
+        align-items: stretch;
+    }
+
+    .upgrade button {
+        width: 100%;
+    }
 }
