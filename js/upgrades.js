@@ -198,6 +198,126 @@ const UPGRADES = [
         type: "auto",
         value: 1500,
         owned: 0
+    },
+    {
+        id: "tribal_chant",
+        era: 0,
+        name: "Боевой напев",
+        description: "+8% к силе всех кликов",
+        baseCost: 180,
+        type: "click",
+        effect: "clickMultiplier",
+        value: 0.08,
+        maxOwned: 5,
+        owned: 0
+    },
+    {
+        id: "lucky_totem",
+        era: 0,
+        name: "Тотем удачи",
+        description: "+3% шанс критического клика",
+        baseCost: 260,
+        type: "click",
+        effect: "critChance",
+        value: 0.03,
+        maxOwned: 5,
+        owned: 0
+    },
+    {
+        id: "granary",
+        era: 1,
+        name: "Зерновой запас",
+        description: "+10% к пассивному доходу",
+        baseCost: 2200,
+        type: "auto",
+        effect: "autoMultiplier",
+        value: 0.1,
+        maxOwned: 5,
+        owned: 0
+    },
+    {
+        id: "market_bargain",
+        era: 1,
+        name: "Рыночный торг",
+        description: "-4% к цене всех улучшений",
+        baseCost: 3200,
+        type: "auto",
+        effect: "discount",
+        value: 0.04,
+        maxOwned: 5,
+        owned: 0
+    },
+    {
+        id: "royal_decree",
+        era: 2,
+        name: "Королевский указ",
+        description: "+50% к силе критического клика",
+        baseCost: 25000,
+        type: "click",
+        effect: "critMultiplier",
+        value: 0.5,
+        maxOwned: 4,
+        owned: 0
+    },
+    {
+        id: "banking_house",
+        era: 2,
+        name: "Банкирский дом",
+        description: "+15% к пассивному доходу",
+        baseCost: 30000,
+        type: "auto",
+        effect: "autoMultiplier",
+        value: 0.15,
+        maxOwned: 5,
+        owned: 0
+    },
+    {
+        id: "overdrive",
+        era: 3,
+        name: "Режим перегруза",
+        description: "+18% к силе всех кликов",
+        baseCost: 180000,
+        type: "click",
+        effect: "clickMultiplier",
+        value: 0.18,
+        maxOwned: 5,
+        owned: 0
+    },
+    {
+        id: "assembly_optimization",
+        era: 3,
+        name: "Оптимизация сборки",
+        description: "-5% к цене всех улучшений",
+        baseCost: 240000,
+        type: "auto",
+        effect: "discount",
+        value: 0.05,
+        maxOwned: 4,
+        owned: 0
+    },
+    {
+        id: "quantum_prediction",
+        era: 4,
+        name: "Квантовое предсказание",
+        description: "+5% шанс критического клика",
+        baseCost: 1800000,
+        type: "click",
+        effect: "critChance",
+        value: 0.05,
+        maxOwned: 4,
+        owned: 0
+    },
+    {
+        id: "dyson_accounting",
+        era: 4,
+        name: "Солнечная бухгалтерия",
+        description: "+25% к пассивному доходу",
+        baseCost: 2600000,
+        type: "auto",
+        effect: "autoMultiplier",
+        value: 0.25,
+        maxOwned: 5,
+        owned: 0
     }
 ];
 
@@ -243,7 +363,7 @@ function renderUpgradeGroup(container, upgrades) {
             <div class="upgrade-info">
                 <h3>${upg.name}</h3>
                 <p>${upg.description}</p>
-                <span>Куплено: ${upg.owned}</span>
+                <span>${getUpgradeOwnedText(upg)}</span>
             </div>
             <button type="button">Купить за ${formatNumber(getUpgradeCost(upg))}</button>
         `;
@@ -266,10 +386,58 @@ function getEraUpgradePurchases(eraIndex) {
         .reduce((total, upg) => total + upg.owned, 0);
 }
 
+function getUpgradeOwnedText(upg) {
+    if (upg.maxOwned) {
+        return `Куплено: ${upg.owned} / ${upg.maxOwned}`;
+    }
+
+    return `Куплено: ${upg.owned}`;
+}
+
+function isUpgradeMaxed(upg) {
+    return Boolean(upg.maxOwned) && upg.owned >= upg.maxOwned;
+}
+
+function getUpgradeEffectTotal(effect) {
+    return UPGRADES
+        .filter(upg => upg.effect === effect)
+        .reduce((total, upg) => total + (upg.value * upg.owned), 0);
+}
+
+function getClickUpgradeMultiplier() {
+    return 1 + getUpgradeEffectTotal("clickMultiplier");
+}
+
+function getAutoUpgradeMultiplier() {
+    return 1 + getUpgradeEffectTotal("autoMultiplier");
+}
+
+function getCriticalClickChance() {
+    return Math.min(0.5, getUpgradeEffectTotal("critChance"));
+}
+
+function getCriticalClickMultiplier() {
+    return 3 + getUpgradeEffectTotal("critMultiplier");
+}
+
+function getUpgradeDiscount() {
+    return Math.min(0.45, getUpgradeEffectTotal("discount"));
+}
+
+function getClickReward(baseAmount) {
+    const critChance = getCriticalClickChance();
+    if (critChance > 0 && Math.random() < critChance) {
+        return baseAmount * getCriticalClickMultiplier();
+    }
+
+    return baseAmount;
+}
+
 // ===== BUY =====
 function buyUpgrade(id) {
     const upg = UPGRADES.find(u => u.id === id);
     if (!upg) return;
+    if (isUpgradeMaxed(upg)) return;
 
     const cost = getUpgradeCost(upg);
     if (gold < cost) return;
@@ -277,9 +445,9 @@ function buyUpgrade(id) {
     gold -= cost;
     upg.owned++;
 
-    if (upg.type === "click") {
+    if (!upg.effect && upg.type === "click") {
         addClickPower(upg.value);
-    } else {
+    } else if (!upg.effect && upg.type === "auto") {
         addAutoIncome(upg.value);
     }
 
@@ -301,6 +469,12 @@ function refreshUpgradeAffordability() {
         const button = item.querySelector("button");
         if (!upg || !button) return;
 
+        if (isUpgradeMaxed(upg)) {
+            button.textContent = "Максимум";
+            button.disabled = true;
+            return;
+        }
+
         const cost = getUpgradeCost(upg);
         button.textContent = `Купить за ${formatNumber(cost)}`;
         button.disabled = gold < cost;
@@ -309,7 +483,10 @@ function refreshUpgradeAffordability() {
 
 // ===== COST =====
 function getUpgradeCost(upg) {
-    return Math.floor(upg.baseCost * Math.pow(1.2, upg.owned));
+    const discount = getUpgradeDiscount();
+    const cost = upg.baseCost * Math.pow(1.2, upg.owned) * (1 - discount);
+
+    return Math.max(1, Math.floor(cost));
 }
 
 // ===== SAVE SUPPORT =====
@@ -325,6 +502,9 @@ function loadUpgrades(data) {
 
     data.forEach(saved => {
         const upg = UPGRADES.find(u => u.id === saved.id);
-        if (upg) upg.owned = Number(saved.owned) || 0;
+        if (!upg) return;
+
+        const owned = Number(saved.owned) || 0;
+        upg.owned = upg.maxOwned ? Math.min(owned, upg.maxOwned) : owned;
     });
 }
