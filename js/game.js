@@ -1,40 +1,43 @@
 let gold = 0;
 let perClick = 1;
 let autoIncome = 0;
-
 let currentEraIndex = 0;
+let gameStarted = false;
 
 // ===== INIT GAME =====
 function initGame() {
-    loadGame();        // завантаження прогресу
-    applyEra();        // застосувати епоху
-    updateUI();        // оновити інтерфейс
+    if (gameStarted) return;
+    gameStarted = true;
+
+    loadGame();
+    initSound();
+    initEraUI();
+    initUpgrades();
+    applyEra({ silent: true });
+    updateUI();
 
     const btn = document.getElementById("clickButton");
 
     btn.addEventListener("click", () => {
         addGold(getClickPower());
         playClickSound();
-        updateUI();
         checkEraUpgrade(gold);
+        updateUI();
+        saveGame();
     });
 
-    // AUTO INCOME LOOP
     setInterval(() => {
         if (autoIncome > 0) {
             addGold(getAutoPower());
-            updateUI();
             checkEraUpgrade(gold);
+            updateUI();
         }
     }, 1000);
 
-    // AUTO SAVE
-    setInterval(() => {
-        saveGame();
-    }, 5000);
+    setInterval(saveGame, 5000);
 }
 
-// ===== GOLD LOGIC =====
+// ===== RESOURCE LOGIC =====
 function addGold(amount) {
     gold += amount;
 }
@@ -57,27 +60,19 @@ function addAutoIncome(value) {
     autoIncome += value;
 }
 
-// ===== ERA INTEGRATION =====
-function checkEraUpgrade(totalGold) {
-    if (!window.ERAS) return;
-
-    for (let i = ERAS.length - 1; i >= 0; i--) {
-        if (totalGold >= ERAS[i].minGold) {
-            if (i !== currentEraIndex) {
-                currentEraIndex = i;
-                applyEra();
-                saveGame();
-            }
-            break;
-        }
-    }
-}
-
 // ===== UI =====
 function updateUI() {
-    document.getElementById("resources").textContent = Math.floor(gold);
-    document.getElementById("perClick").textContent = getClickPower();
-    document.getElementById("autoIncome").textContent = getAutoPower();
+    const era = getCurrentEra();
+
+    document.getElementById("resources").textContent = formatNumber(Math.floor(gold));
+    document.getElementById("perClick").textContent = formatNumber(getClickPower());
+    document.getElementById("autoIncome").textContent = formatNumber(getAutoPower());
+
+    const resourceName = document.getElementById("resourceName");
+    if (resourceName && era) resourceName.textContent = era.resourceName;
+
+    updateEraProgress(gold);
+    refreshUpgradeAffordability();
 }
 
 // ===== SAVE / LOAD =====
@@ -86,7 +81,8 @@ function saveGame() {
         gold,
         perClick,
         autoIncome,
-        era: currentEraIndex
+        era: currentEraIndex,
+        upgrades: getUpgradesData()
     });
 }
 
@@ -94,16 +90,30 @@ function loadGame() {
     const data = loadFromStorage();
     if (!data) return;
 
-    gold = data.gold || 0;
-    perClick = data.perClick || 1;
-    autoIncome = data.autoIncome || 0;
-    currentEraIndex = data.era || 0;
+    gold = Number(data.gold) || 0;
+    perClick = Number(data.perClick) || 1;
+    autoIncome = Number(data.autoIncome) || 0;
+    if (typeof loadUpgrades === "function") {
+        loadUpgrades(data.upgrades);
+    }
+
+    currentEraIndex = Number(data.era) || 0;
+
+    if (typeof getEraIndexForProgress === "function") {
+        currentEraIndex = Math.max(currentEraIndex, getEraIndexForProgress(gold, currentEraIndex));
+    }
 }
 
 // ===== SOUND =====
+function initSound() {
+    if (window.SoundManager) {
+        SoundManager.init();
+    }
+}
+
 function playClickSound() {
-    if (window.playSound) {
-        playSound("click");
+    if (window.SoundManager) {
+        SoundManager.playClick(currentEraIndex);
     }
 }
 
