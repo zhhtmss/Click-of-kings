@@ -208,13 +208,33 @@ function initUpgrades() {
 
 // ===== RENDER SHOP =====
 function renderUpgrades() {
-    const container = document.getElementById("upgradesList");
+    const eraUpgrades = getAvailableUpgrades();
+    const clickContainer = document.getElementById("clickUpgradesList");
+    const autoContainer = document.getElementById("autoUpgradesList");
+    const legacyContainer = document.getElementById("upgradesList");
+
+    if (clickContainer || autoContainer) {
+        renderUpgradeGroup(
+            clickContainer,
+            eraUpgrades.filter(upg => upg.type === "click")
+        );
+        renderUpgradeGroup(
+            autoContainer,
+            eraUpgrades.filter(upg => upg.type === "auto")
+        );
+    } else {
+        renderUpgradeGroup(legacyContainer, eraUpgrades);
+    }
+
+    refreshUpgradeAffordability();
+}
+
+function renderUpgradeGroup(container, upgrades) {
     if (!container) return;
 
-    const eraUpgrades = getAvailableUpgrades();
     container.innerHTML = "";
 
-    eraUpgrades.forEach(upg => {
+    upgrades.forEach(upg => {
         const div = document.createElement("div");
         div.className = "upgrade";
         div.dataset.upgradeId = upg.id;
@@ -234,8 +254,6 @@ function renderUpgrades() {
 
         container.appendChild(div);
     });
-
-    refreshUpgradeAffordability();
 }
 
 function getAvailableUpgrades() {
