@@ -17,8 +17,14 @@ function fixLegacyText() {
     const loaderTitle = document.querySelector("#loader h1");
     if (loaderTitle) loaderTitle.textContent = "Click of Kings";
 
-    const shopTitle = document.querySelector(".shop h2");
-    if (shopTitle) shopTitle.textContent = "Улучшения эпохи";
+    const clickShopTitle = document.querySelector(".shop-click h2");
+    if (clickShopTitle) clickShopTitle.textContent = "Click Upgrades";
+
+    const autoShopTitle = document.querySelector(".shop-auto h2");
+    if (autoShopTitle) autoShopTitle.textContent = "Income Per Second";
+
+    const legacyShopTitle = document.querySelector(".shop:not(.shop-click):not(.shop-auto) h2");
+    if (legacyShopTitle) legacyShopTitle.textContent = "Улучшения эпохи";
 }
 
 function ensureEraPanel() {
