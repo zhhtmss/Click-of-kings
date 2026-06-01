@@ -1,8 +1,8 @@
 <!DOCTYPE html>
-<html lang="uk">
+<html lang="ru">
 <head>
     <meta charset="UTF-8" />
-    <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
     <title>Click of Kings</title>
 
     <link rel="stylesheet" href="css/style.css">
@@ -15,8 +15,8 @@
     <!-- LOADING SCREEN -->
     <div id="loader">
         <div class="loader-content">
-            <h1>👑 Click of Kings</h1>
-            <p>Loading kingdom...</p>
+            <h1>Click of Kings</h1>
+            <p>Пробуждаем королевство...</p>
             <div class="spinner"></div>
         </div>
     </div>
@@ -24,35 +24,57 @@
     <!-- GAME WRAPPER -->
     <div id="game" class="hidden">
 
-        <!-- BACKGROUND (міняється ерою через JS) -->
+        <!-- BACKGROUND -->
         <div id="background"></div>
 
         <!-- HUD -->
         <header class="hud">
             <div class="left">
                 <h1>Click of Kings</h1>
-                <span id="eraName">Loading...</span>
+                <span id="eraName">Загрузка...</span>
             </div>
 
             <div class="right">
-                <div>💰 <span id="resources">0</span></div>
-                <div>⚔️ <span id="perClick">1</span></div>
-                <div>🏰 <span id="autoIncome">0</span></div>
+                <div><span id="resourceName">Власть</span>: <span id="resources">0</span></div>
+                <div>Клик: <span id="perClick">1</span></div>
+                <div>Доход: <span id="autoIncome">0</span>/с</div>
+                <button id="soundToggle" class="sound-toggle" type="button" aria-label="Включить или выключить звук">Звук: вкл</button>
             </div>
         </header>
 
-        <!-- GAME AREA -->
-        <main class="game-area">
-            <button id="clickButton" class="click-button">
-                <img id="clickImage" src="assets/images/items/era1_click.webp" alt="click">
-            </button>
-        </main>
+        <div class="content-layout">
+            <!-- CLICK SHOP -->
+            <aside class="shop shop-click">
+                <h2>Click Upgrades</h2>
+                <div id="clickUpgradesList"></div>
+            </aside>
 
-        <!-- SHOP -->
-        <aside class="shop">
-            <h2>Upgrades</h2>
-            <div id="upgradesList"></div>
-        </aside>
+            <!-- GAME AREA -->
+            <main class="game-area">
+                <section class="era-panel" aria-live="polite">
+                <p id="eraDescription">Развивайте цивилизацию кликами и улучшениями.</p>
+                <div class="progress-wrap">
+                    <div class="progress-label">
+                        <span id="nextEraLabel">Следующая эпоха</span>
+                        <span id="nextEraCost">0</span>
+                    </div>
+                    <div class="progress-bar">
+                        <span id="eraProgress"></span>
+                    </div>
+                </div>
+                </section>
+
+                <button id="clickButton" class="click-button" type="button">
+                <img id="clickImage" src="assets/images/items/era1_click.webp" alt="Первобытная эпоха">
+                </button>
+            </main>
+
+            <!-- PASSIVE SHOP -->
+            <aside class="shop shop-auto">
+                <h2>Income Per Second</h2>
+                <div id="autoUpgradesList"></div>
+            </aside>
+        </div>
 
     </div>
 
