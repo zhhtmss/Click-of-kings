@@ -19,7 +19,12 @@ function initGame() {
     const btn = document.getElementById("clickButton");
 
     btn.addEventListener("click", () => {
-        addGold(getClickPower());
+        const clickPower = getClickPower();
+        const reward = typeof getClickReward === "function"
+            ? getClickReward(clickPower)
+            : clickPower;
+
+        addGold(reward);
         playClickSound();
         checkEraUpgrade(gold);
         updateUI();
@@ -44,11 +49,19 @@ function addGold(amount) {
 
 // ===== POWER SYSTEM =====
 function getClickPower() {
-    return perClick * getClickMultiplier();
+    const upgradeMultiplier = typeof getClickUpgradeMultiplier === "function"
+        ? getClickUpgradeMultiplier()
+        : 1;
+
+    return perClick * getClickMultiplier() * upgradeMultiplier;
 }
 
 function getAutoPower() {
-    return autoIncome * getAutoMultiplier();
+    const upgradeMultiplier = typeof getAutoUpgradeMultiplier === "function"
+        ? getAutoUpgradeMultiplier()
+        : 1;
+
+    return autoIncome * getAutoMultiplier() * upgradeMultiplier;
 }
 
 // ===== UPGRADES HELPERS =====
