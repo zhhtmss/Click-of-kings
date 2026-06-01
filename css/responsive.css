@@ -1,7 +1,16 @@
 @media (max-width: 900px) {
+    body {
+        overflow-y: auto;
+    }
+
     #game {
         min-height: 100vh;
         height: auto;
+    }
+
+    .content-layout {
+        flex-direction: column;
+        min-height: auto;
     }
 
     .hud {
@@ -23,7 +32,12 @@
     }
 
     .shop {
+        width: 100%;
+        min-width: 0;
         height: 330px;
+        border-top: 1px solid rgba(255, 255, 255, .12);
+        border-left: 0;
+        border-right: 0;
     }
 }
 
