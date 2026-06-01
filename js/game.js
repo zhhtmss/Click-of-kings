@@ -138,6 +138,3 @@ function getClickMultiplier() {
 function getAutoMultiplier() {
     return ERAS?.[currentEraIndex]?.autoMultiplier || 1;
 }
-
-// ===== START GAME =====
-window.addEventListener("load", initGame);
