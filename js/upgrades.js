@@ -508,3 +508,9 @@ function loadUpgrades(data) {
         upg.owned = upg.maxOwned ? Math.min(owned, upg.maxOwned) : owned;
     });
 }
+
+function resetUpgrades() {
+    UPGRADES.forEach(upg => {
+        upg.owned = 0;
+    });
+}

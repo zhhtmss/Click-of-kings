@@ -38,7 +38,10 @@
                 <div><span id="resourceName">Власть</span>: <span id="resources">0</span></div>
                 <div>Клик: <span id="perClick">1</span></div>
                 <div>Доход: <span id="autoIncome">0</span>/с</div>
-                <button id="soundToggle" class="sound-toggle" type="button" aria-label="Включить или выключить звук">Звук: вкл</button>
+                <label class="volume-control" for="volumeSlider">
+                    <span>Громкость</span>
+                    <input id="volumeSlider" type="range" min="0" max="100" value="100" aria-label="Громкость">
+                </label>
             </div>
         </header>
 
@@ -67,6 +70,11 @@
                 <button id="clickButton" class="click-button" type="button">
                 <img id="clickImage" src="assets/images/items/era1_click.webp" alt="Первобытная эпоха">
                 </button>
+
+                <div class="game-controls">
+                    <button id="resetProgress" class="control-button danger" type="button">Скинуть прогресс</button>
+                    <button id="soundToggle" class="control-button sound-toggle" type="button" aria-label="Включить или выключить звук">Звук</button>
+                </div>
             </main>
 
             <!-- PASSIVE SHOP -->

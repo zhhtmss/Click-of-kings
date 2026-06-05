@@ -10,8 +10,8 @@ function initGame() {
     gameStarted = true;
 
     loadGame();
-    initSound();
     initEraUI();
+    initSound();
     initUpgrades();
     applyEra({ silent: true });
     updateUI();
@@ -30,6 +30,11 @@ function initGame() {
         updateUI();
         saveGame();
     });
+
+    const resetButton = document.getElementById("resetProgress");
+    if (resetButton) {
+        resetButton.addEventListener("click", resetGameProgress);
+    }
 
     setInterval(() => {
         if (autoIncome > 0) {
@@ -115,6 +120,26 @@ function loadGame() {
     if (typeof getEraIndexForProgress === "function") {
         currentEraIndex = Math.max(currentEraIndex, getEraIndexForProgress(gold, currentEraIndex));
     }
+}
+
+function resetGameProgress() {
+    const confirmed = window.confirm("Скинуть весь прогресс?");
+    if (!confirmed) return;
+
+    clearSave();
+    gold = 0;
+    perClick = 1;
+    autoIncome = 0;
+    currentEraIndex = 0;
+
+    if (typeof resetUpgrades === "function") {
+        resetUpgrades();
+    }
+
+    applyEra({ silent: true });
+    renderUpgrades();
+    updateUI();
+    saveGame();
 }
 
 // ===== SOUND =====

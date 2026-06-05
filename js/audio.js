@@ -1,12 +1,15 @@
 const SoundManager = (() => {
     const music = new Map();
     const effects = new Map();
+    const musicBaseVolume = 0.36;
+    const effectBaseVolume = 0.7;
 
     let context = null;
     let enabled = true;
     let unlocked = false;
     let currentEra = 0;
     let currentMusic = null;
+    let volume = 1;
 
     const effectSources = {
         buy: "./assets/sounds/buy.mp3",
@@ -19,6 +22,7 @@ const SoundManager = (() => {
         preloadEffects();
         bindUnlockEvents();
         bindToggle();
+        bindVolume();
         updateToggleText();
     }
 
@@ -27,7 +31,7 @@ const SoundManager = (() => {
             const audio = new Audio(era.music);
             audio.preload = "auto";
             audio.loop = true;
-            audio.volume = 0.36;
+            audio.volume = getMusicVolume();
             music.set(index, audio);
         });
     }
@@ -36,7 +40,7 @@ const SoundManager = (() => {
         Object.entries(effectSources).forEach(([name, src]) => {
             const audio = new Audio(src);
             audio.preload = "auto";
-            audio.volume = 0.7;
+            audio.volume = getEffectVolume();
             effects.set(name, audio);
         });
     }
@@ -59,6 +63,21 @@ const SoundManager = (() => {
                 stopMusic();
             }
             updateToggleText();
+        });
+    }
+
+    function bindVolume() {
+        const slider = document.getElementById("volumeSlider");
+        if (!slider) return;
+
+        slider.value = Math.round(volume * 100);
+        slider.addEventListener("input", () => {
+            volume = Math.max(0, Math.min(1, Number(slider.value) / 100));
+            applyVolume();
+
+            if (enabled && unlocked && volume > 0) {
+                playMusicForEra(currentEra);
+            }
         });
     }
 
@@ -101,7 +120,7 @@ const SoundManager = (() => {
         }
 
         currentMusic = nextMusic;
-        currentMusic.volume = 0.36;
+        currentMusic.volume = getMusicVolume();
 
         const playPromise = currentMusic.play();
         if (playPromise) {
@@ -127,7 +146,7 @@ const SoundManager = (() => {
         if (!base) return;
 
         const audio = base.cloneNode();
-        audio.volume = base.volume;
+        audio.volume = getEffectVolume();
         audio.play().catch(() => {});
     }
 
@@ -174,13 +193,14 @@ const SoundManager = (() => {
         const now = context.currentTime + delay;
         const osc = context.createOscillator();
         const amp = context.createGain();
+        const targetGain = Math.max(0.0001, gain * volume);
 
         osc.type = type;
         osc.frequency.setValueAtTime(start, now);
         osc.frequency.exponentialRampToValueAtTime(Math.max(1, end), now + duration);
 
         amp.gain.setValueAtTime(0.0001, now);
-        amp.gain.exponentialRampToValueAtTime(gain, now + 0.012);
+        amp.gain.exponentialRampToValueAtTime(targetGain, now + 0.012);
         amp.gain.exponentialRampToValueAtTime(0.0001, now + duration);
 
         osc.connect(amp);
@@ -206,7 +226,7 @@ const SoundManager = (() => {
         lowpass.type = "lowpass";
         lowpass.frequency.value = filter;
 
-        amp.gain.setValueAtTime(gain, now);
+        amp.gain.setValueAtTime(gain * volume, now);
         amp.gain.exponentialRampToValueAtTime(0.0001, now + duration);
 
         noise.buffer = buffer;
@@ -220,8 +240,31 @@ const SoundManager = (() => {
         const toggle = document.getElementById("soundToggle");
         if (!toggle) return;
 
-        toggle.textContent = enabled ? "Звук: вкл" : "Звук: выкл";
+        toggle.textContent = "Звук";
+        toggle.classList.toggle("is-muted", !enabled);
         toggle.setAttribute("aria-pressed", String(enabled));
+    }
+
+    function getMusicVolume() {
+        return musicBaseVolume * volume;
+    }
+
+    function getEffectVolume() {
+        return effectBaseVolume * volume;
+    }
+
+    function applyVolume() {
+        music.forEach(audio => {
+            audio.volume = getMusicVolume();
+        });
+
+        effects.forEach(audio => {
+            audio.volume = getEffectVolume();
+        });
+
+        if (currentMusic) {
+            currentMusic.volume = getMusicVolume();
+        }
     }
 
     return {
