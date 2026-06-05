@@ -41,10 +41,10 @@ body::-webkit-scrollbar,
 }
 
 .era-medieval {
-    --accent: #d44242;
-    --accent-strong: #ff7777;
-    --panel: rgba(24, 31, 33, .7);
-    --panel-strong: rgba(12, 18, 20, .88);
+    --accent: #2ba84a;
+    --accent-strong: #45d965;
+    --panel: rgba(15, 40, 25, .7);
+    --panel-strong: rgba(8, 22, 14, .88);
 }
 
 .era-industrial {

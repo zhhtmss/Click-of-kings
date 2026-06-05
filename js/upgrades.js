@@ -82,7 +82,7 @@ const UPGRADES = [
     {
         id: "royal_sword",
         era: 2,
-        name: "Королевский меч",
+        name: "Небоскреб",
         description: "+18 к силе клика",
         baseCost: 5500,
         type: "click",
@@ -92,7 +92,7 @@ const UPGRADES = [
     {
         id: "knight_order",
         era: 2,
-        name: "Орден рыцарей",
+        name: "Деловой центр",
         description: "+35 к силе клика",
         baseCost: 9500,
         type: "click",
@@ -102,7 +102,7 @@ const UPGRADES = [
     {
         id: "castle_village",
         era: 2,
-        name: "Замковая деревня",
+        name: "Парк и озеленение",
         description: "+25 дохода в секунду",
         baseCost: 7200,
         type: "auto",
@@ -112,7 +112,7 @@ const UPGRADES = [
     {
         id: "blacksmith_guild",
         era: 2,
-        name: "Гильдия кузнецов",
+        name: "Транспортная сеть",
         description: "+55 дохода в секунду",
         baseCost: 15000,
         type: "auto",
@@ -250,7 +250,7 @@ const UPGRADES = [
     {
         id: "royal_decree",
         era: 2,
-        name: "Королевский указ",
+        name: "Умный город",
         description: "+50% к силе критического клика",
         baseCost: 25000,
         type: "click",
@@ -262,7 +262,7 @@ const UPGRADES = [
     {
         id: "banking_house",
         era: 2,
-        name: "Банкирский дом",
+        name: "Финансовый район",
         description: "+15% к пассивному доходу",
         baseCost: 30000,
         type: "auto",
