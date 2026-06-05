@@ -54,7 +54,7 @@ const ERAS = [
         description: "Фабрики, пар, сталь и механизмы ускоряют рост цивилизации.",
         resourceName: "Капитал",
         minGold: 50000,
-        requiredUpgrades: 14,
+        requiredUpgrades: 6,
         clickMultiplier: 12,
         autoMultiplier: 15,
         background: "./assets/images/backgrounds/era4.webp",
@@ -130,7 +130,7 @@ function applyEra(options = {}) {
     document.body.classList.add(era.themeClass);
 
     const eraName = document.getElementById("eraName");
-    if (eraName) eraName.textContent = era.name;
+    if (eraName) eraName.textContent = `${era.name} (${currentEraIndex + 1}/${ERAS.length})`;
 
     const eraDescription = document.getElementById("eraDescription");
     if (eraDescription) eraDescription.textContent = era.description;
@@ -162,7 +162,7 @@ function updateEraProgress(totalGold) {
 
     if (!nextEra) {
         progress.style.width = "100%";
-        nextEraLabel.textContent = "Максимальная эпоха";
+        nextEraLabel.textContent = `Эпоха ${currentEraIndex + 1} / ${ERAS.length}: максимальная эпоха`;
         nextEraCost.textContent = "Цивилизация завершена";
         return;
     }
@@ -176,6 +176,6 @@ function updateEraProgress(totalGold) {
     const percent = Math.min(resourcePercent, upgradePercent);
 
     progress.style.width = `${percent}%`;
-    nextEraLabel.textContent = `К цели: ${nextEra.name}`;
+    nextEraLabel.textContent = `Эпоха ${currentEraIndex + 1} / ${ERAS.length}: к цели ${nextEra.name}`;
     nextEraCost.textContent = `${formatNumber(Math.floor(totalGold))} / ${formatNumber(nextEra.minGold)} | улучшения ${ownedUpgrades} / ${requiredUpgrades}`;
 }
