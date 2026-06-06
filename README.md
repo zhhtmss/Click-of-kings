@@ -84,6 +84,7 @@ click_of_kings_save
 localStorage.removeItem("click_of_kings_save");
 location.reload();
 ```
+Более легче можно использовать кнопку ниже центральной картинки.
 
 ## Настройка игры
 
