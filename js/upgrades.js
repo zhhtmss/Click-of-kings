@@ -122,7 +122,7 @@ const UPGRADES = [
     {
         id: "steam_press",
         era: 3,
-        name: "Паровой пресс",
+        name: "Нейрочип",
         description: "+70 к силе клика",
         baseCost: 52000,
         type: "click",
@@ -132,7 +132,7 @@ const UPGRADES = [
     {
         id: "steel_machine",
         era: 3,
-        name: "Стальной механизм",
+        name: "Голографический процессор",
         description: "+140 к силе клика",
         baseCost: 90000,
         type: "click",
@@ -142,7 +142,7 @@ const UPGRADES = [
     {
         id: "factory_line",
         era: 3,
-        name: "Фабричная линия",
+        name: "Киберфабрика",
         description: "+120 дохода в секунду",
         baseCost: 76000,
         type: "auto",
@@ -152,7 +152,7 @@ const UPGRADES = [
     {
         id: "rail_network",
         era: 3,
-        name: "Железная дорога",
+        name: "Квантовая сеть",
         description: "+260 дохода в секунду",
         baseCost: 150000,
         type: "auto",
