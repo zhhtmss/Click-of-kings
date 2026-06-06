@@ -48,10 +48,12 @@ body::-webkit-scrollbar,
 }
 
 .era-industrial {
-    --accent: #e18a3b;
-    --accent-strong: #ffb35f;
-    --panel: rgba(35, 36, 34, .72);
-    --panel-strong: rgba(18, 19, 18, .9);
+    --accent: #00d9ff;
+    --accent-strong: #66ffff;
+    --panel: rgba(15, 35, 50, .75);
+    --panel-strong: rgba(8, 18, 28, .92);
+    --text: #66ffff;
+    --muted: rgba(102, 255, 255, .65);
 }
 
 .era-future {
