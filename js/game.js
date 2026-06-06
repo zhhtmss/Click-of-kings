@@ -16,9 +16,9 @@ function initGame() {
     applyEra({ silent: true });
     updateUI();
 
-    const btn = document.getElementById("clickButton");
+    const clickImage = document.getElementById("clickImage");
 
-    btn.addEventListener("click", () => {
+    clickImage.addEventListener("click", () => {
         const clickPower = getClickPower();
         const reward = typeof getClickReward === "function"
             ? getClickReward(clickPower)
