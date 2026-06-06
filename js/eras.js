@@ -50,9 +50,9 @@ const ERAS = [
         clickSound: "metal"
     },
     {
-        name: "Индустриальная эпоха",
-        description: "Фабрики, пар, сталь и механизмы ускоряют рост цивилизации.",
-        resourceName: "Капитал",
+        name: "Киберпанк",
+        description: "Неоновые города, искусственный интеллект и сверхвысокие технологии освещают мир будущего.",
+        resourceName: "Байты",
         minGold: 50000,
         requiredUpgrades: 6,
         clickMultiplier: 12,
