@@ -112,7 +112,6 @@ const SoundManager = (() => {
 
         if (options.transition) {
             playEffect("transition");
-            playTransitionSweep(index);
         }
 
         if (unlocked && enabled) {
@@ -170,62 +169,6 @@ const SoundManager = (() => {
         const audio = base.cloneNode();
         audio.volume = getEffectVolume();
         audio.play().catch(() => {});
-    }
-
-    function playTransitionSweep(index) {
-        if (!enabled) return;
-        unlock();
-        if (!context) return;
-
-        const base = 180 + index * 90;
-        playTone({ type: "sawtooth", start: base, end: base * 2.4, duration: 0.45, gain: 0.07 });
-    }
-
-    function playTone({ type, start, end, duration, gain, delay = 0 }) {
-        const now = context.currentTime + delay;
-        const osc = context.createOscillator();
-        const amp = context.createGain();
-        const targetGain = Math.max(0.0001, gain * volume);
-
-        osc.type = type;
-        osc.frequency.setValueAtTime(start, now);
-        osc.frequency.exponentialRampToValueAtTime(Math.max(1, end), now + duration);
-
-        amp.gain.setValueAtTime(0.0001, now);
-        amp.gain.exponentialRampToValueAtTime(targetGain, now + 0.012);
-        amp.gain.exponentialRampToValueAtTime(0.0001, now + duration);
-
-        osc.connect(amp);
-        amp.connect(context.destination);
-        osc.start(now);
-        osc.stop(now + duration + 0.02);
-    }
-
-    function playNoise({ duration, gain, filter }) {
-        const now = context.currentTime;
-        const bufferSize = context.sampleRate * duration;
-        const buffer = context.createBuffer(1, bufferSize, context.sampleRate);
-        const data = buffer.getChannelData(0);
-
-        for (let i = 0; i < bufferSize; i++) {
-            data[i] = Math.random() * 2 - 1;
-        }
-
-        const noise = context.createBufferSource();
-        const amp = context.createGain();
-        const lowpass = context.createBiquadFilter();
-
-        lowpass.type = "lowpass";
-        lowpass.frequency.value = filter;
-
-        amp.gain.setValueAtTime(gain * volume, now);
-        amp.gain.exponentialRampToValueAtTime(0.0001, now + duration);
-
-        noise.buffer = buffer;
-        noise.connect(lowpass);
-        lowpass.connect(amp);
-        amp.connect(context.destination);
-        noise.start(now);
     }
 
     function updateToggleText() {
