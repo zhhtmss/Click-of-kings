@@ -12,13 +12,14 @@ function initGame() {
     loadGame();
     initEraUI();
     initSound();
+    initParticles();
     initUpgrades();
     applyEra({ silent: true });
     updateUI();
 
     const clickImage = document.getElementById("clickImage");
 
-    clickImage.addEventListener("click", () => {
+    clickImage.addEventListener("click", (e) => {
         const clickPower = getClickPower();
         const reward = typeof getClickReward === "function"
             ? getClickReward(clickPower)
@@ -26,6 +27,7 @@ function initGame() {
 
         addGold(reward);
         playClickSound();
+        createClickParticles(e);
         checkEraUpgrade(gold);
         updateUI();
         saveGame();
@@ -146,6 +148,18 @@ function resetGameProgress() {
 function initSound() {
     if (window.SoundManager) {
         SoundManager.init();
+    }
+}
+
+function initParticles() {
+    if (window.ParticleSystem) {
+        ParticleSystem.init();
+    }
+}
+
+function createClickParticles(event) {
+    if (window.ParticleSystem) {
+        ParticleSystem.createParticles(event.clientX, event.clientY, currentEraIndex);
     }
 }
 
