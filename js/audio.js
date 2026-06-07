@@ -24,7 +24,17 @@ const SoundManager = (() => {
         bindToggle();
         bindVolume();
         updateToggleText();
-        unlock();
+        
+        const startAudioOnGesture = () => {
+            if (!unlocked) {
+                unlock();
+            }
+            document.removeEventListener("click", startAudioOnGesture);
+            document.removeEventListener("touchstart", startAudioOnGesture);
+        };
+        
+        document.addEventListener("click", startAudioOnGesture);
+        document.addEventListener("touchstart", startAudioOnGesture);
     }
 
     function preloadMusic() {
@@ -62,8 +72,16 @@ const SoundManager = (() => {
         toggle.addEventListener("click", () => {
             enabled = !enabled;
             if (enabled) {
-                unlock();
-                playMusicForEra(currentEra);
+                if (!unlocked) {
+                    try {
+                        unlock();
+                    } catch (err) {
+                        console.warn("Could not unlock audio:", err);
+                    }
+                }
+                if (unlocked) {
+                    playMusicForEra(currentEra);
+                }
             } else {
                 stopMusic();
             }
@@ -88,7 +106,7 @@ const SoundManager = (() => {
 
     function unlock() {
         if (!context) {
-            context = new (window.AudioContext || window.webkitAudioContext)();
+            context = new (window.AudioContext)();
         }
 
         if (context.state === "suspended") {
@@ -116,7 +134,7 @@ const SoundManager = (() => {
 
     function playMusicForEra(index) {
         const nextMusic = music.get(index);
-        if (!enabled || !nextMusic) return;
+        if (!enabled || !nextMusic || !unlocked) return;
 
         if (currentMusic && currentMusic !== nextMusic) {
             // Плавный переход между музыками
@@ -130,7 +148,7 @@ const SoundManager = (() => {
             const playPromise = currentMusic.play();
             if (playPromise) {
                 playPromise.catch(() => {
-                    unlocked = false;
+                    console.warn("Не удалось воспроизвести музыку, попытка позже...");
                 });
             }
 
@@ -144,7 +162,7 @@ const SoundManager = (() => {
             const playPromise = currentMusic.play();
             if (playPromise) {
                 playPromise.catch(() => {
-                    unlocked = false;
+                    console.warn("Не удалось воспроизвести музыку, попытка позже...");
                 });
             }
         }
@@ -254,7 +272,9 @@ const SoundManager = (() => {
         init,
         setEra,
         playClick,
-        playEffect
+        playEffect,
+        unlock,
+        isUnlocked: () => unlocked
     };
 })();
 
