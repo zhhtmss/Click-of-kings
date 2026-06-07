@@ -21,10 +21,10 @@ const SoundManager = (() => {
         preloadMusic();
         preloadEffects();
         preloadClickSounds();
-        bindUnlockEvents();
         bindToggle();
         bindVolume();
         updateToggleText();
+        unlock();
     }
 
     function preloadMusic() {
@@ -53,11 +53,6 @@ const SoundManager = (() => {
             audio.volume = getEffectVolume();
             clicks.set(i, audio);
         }
-    }
-
-    function bindUnlockEvents() {
-        document.addEventListener("pointerdown", unlock, { once: true });
-        document.addEventListener("keydown", unlock, { once: true });
     }
 
     function bindToggle() {
