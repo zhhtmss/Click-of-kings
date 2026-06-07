@@ -1,6 +1,7 @@
 const SoundManager = (() => {
     const music = new Map();
     const effects = new Map();
+    const clicks = new Map();
     const musicBaseVolume = 0.36;
     const effectBaseVolume = 0.7;
 
@@ -13,13 +14,13 @@ const SoundManager = (() => {
 
     const effectSources = {
         buy: "./assets/sounds/buy.mp3",
-        upgrade: "./assets/sounds/upgrade.mp3",
         transition: "./assets/sounds/era-change.mp3"
     };
 
     function init() {
         preloadMusic();
         preloadEffects();
+        preloadClickSounds();
         bindUnlockEvents();
         bindToggle();
         bindVolume();
@@ -43,6 +44,15 @@ const SoundManager = (() => {
             audio.volume = getEffectVolume();
             effects.set(name, audio);
         });
+    }
+
+    function preloadClickSounds() {
+        for (let i = 0; i < ERAS.length; i++) {
+            const audio = new Audio(`./assets/sounds/click_era${i + 1}.mp3`);
+            audio.preload = "auto";
+            audio.volume = getEffectVolume();
+            clicks.set(i, audio);
+        }
     }
 
     function bindUnlockEvents() {
@@ -153,31 +163,13 @@ const SoundManager = (() => {
     function playClick(eraIndex) {
         if (!enabled) return;
         unlock();
-        if (!context) return;
 
-        const era = ERAS[eraIndex] || ERAS[0];
+        const base = clicks.get(eraIndex);
+        if (!base) return;
 
-        switch (era.clickSound) {
-            case "coin":
-                playTone({ type: "triangle", start: 980, end: 1450, duration: 0.12, gain: 0.09 });
-                playTone({ type: "sine", start: 1640, end: 1160, duration: 0.16, gain: 0.05, delay: 0.04 });
-                break;
-            case "metal":
-                playTone({ type: "square", start: 380, end: 120, duration: 0.1, gain: 0.08 });
-                playTone({ type: "triangle", start: 1800, end: 720, duration: 0.2, gain: 0.05 });
-                break;
-            case "machine":
-                playTone({ type: "sawtooth", start: 120, end: 85, duration: 0.14, gain: 0.08 });
-                playNoise({ duration: 0.1, gain: 0.05, filter: 900 });
-                break;
-            case "sci-fi":
-                playTone({ type: "sine", start: 420, end: 1320, duration: 0.18, gain: 0.08 });
-                playTone({ type: "triangle", start: 1260, end: 540, duration: 0.12, gain: 0.05, delay: 0.03 });
-                break;
-            default:
-                playTone({ type: "triangle", start: 150, end: 70, duration: 0.13, gain: 0.1 });
-                playNoise({ duration: 0.08, gain: 0.04, filter: 500 });
-        }
+        const audio = base.cloneNode();
+        audio.volume = getEffectVolume();
+        audio.play().catch(() => {});
     }
 
     function playTransitionSweep(index) {
@@ -259,6 +251,10 @@ const SoundManager = (() => {
         });
 
         effects.forEach(audio => {
+            audio.volume = getEffectVolume();
+        });
+
+        clicks.forEach(audio => {
             audio.volume = getEffectVolume();
         });
 
