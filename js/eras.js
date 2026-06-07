@@ -2,7 +2,7 @@ const ERA_CLASSES = [
     "era-primitive",
     "era-ancient",
     "era-medieval",
-    "era-industrial",
+    "era-cyberpunk",
     "era-future"
 ];
 
@@ -18,8 +18,7 @@ const ERAS = [
         background: "./assets/images/backgrounds/era1.webp",
         clickImage: "./assets/images/items/era1_click.webp",
         music: "./assets/music/era1.mp3",
-        themeClass: "era-primitive",
-        clickSound: "stone"
+        themeClass: "era-primitive"
     },
     {
         name: "Древний мир",
@@ -32,8 +31,7 @@ const ERAS = [
         background: "./assets/images/backgrounds/era2.webp",
         clickImage: "./assets/images/items/era2_click.webp",
         music: "./assets/music/era2.mp3",
-        themeClass: "era-ancient",
-        clickSound: "coin"
+        themeClass: "era-ancient"
     },
     {
         name: "Мегаполис",
@@ -46,8 +44,7 @@ const ERAS = [
         background: "./assets/images/backgrounds/era3.webp",
         clickImage: "./assets/images/items/era3_click.webp",
         music: "./assets/music/era3.mp3",
-        themeClass: "era-medieval",
-        clickSound: "metal"
+        themeClass: "era-medieval"
     },
     {
         name: "Киберпанк",
@@ -60,8 +57,7 @@ const ERAS = [
         background: "./assets/images/backgrounds/era4.webp",
         clickImage: "./assets/images/items/era4_click.webp",
         music: "./assets/music/era4.mp3",
-        themeClass: "era-industrial",
-        clickSound: "machine"
+        themeClass: "era-cyberpunk"
     },
     {
         name: "Футуризм",
@@ -74,8 +70,7 @@ const ERAS = [
         background: "./assets/images/backgrounds/era5.webp",
         clickImage: "./assets/images/items/era5_click.webp",
         music: "./assets/music/era5.mp3",
-        themeClass: "era-future",
-        clickSound: "sci-fi"
+        themeClass: "era-future"
     }
 ];
 
