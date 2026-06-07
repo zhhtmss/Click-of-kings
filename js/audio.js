@@ -119,19 +119,68 @@ const SoundManager = (() => {
         if (!enabled || !nextMusic) return;
 
         if (currentMusic && currentMusic !== nextMusic) {
-            currentMusic.pause();
+            // Плавный переход между музыками
+            fadeOutMusic(currentMusic, 0.5);
+            
+            // Начинаем новую музыку с нулевой громкостью
+            currentMusic = nextMusic;
+            currentMusic.volume = 0;
             currentMusic.currentTime = 0;
-        }
 
-        currentMusic = nextMusic;
-        currentMusic.volume = getMusicVolume();
+            const playPromise = currentMusic.play();
+            if (playPromise) {
+                playPromise.catch(() => {
+                    unlocked = false;
+                });
+            }
 
-        const playPromise = currentMusic.play();
-        if (playPromise) {
-            playPromise.catch(() => {
-                unlocked = false;
-            });
+            // Плавно увеличиваем громкость новой музыки
+            fadeInMusic(currentMusic, 0.5);
+        } else if (!currentMusic) {
+            currentMusic = nextMusic;
+            currentMusic.volume = getMusicVolume();
+            currentMusic.currentTime = 0;
+
+            const playPromise = currentMusic.play();
+            if (playPromise) {
+                playPromise.catch(() => {
+                    unlocked = false;
+                });
+            }
         }
+    }
+
+    function fadeOutMusic(audio, duration) {
+        const startVolume = audio.volume;
+        const startTime = Date.now();
+
+        const fadeInterval = setInterval(() => {
+            const elapsed = Date.now() - startTime;
+            const progress = Math.min(elapsed / (duration * 1000), 1);
+            audio.volume = startVolume * (1 - progress);
+
+            if (progress >= 1) {
+                clearInterval(fadeInterval);
+                audio.pause();
+                audio.currentTime = 0;
+            }
+        }, 16);
+    }
+
+    function fadeInMusic(audio, duration) {
+        const targetVolume = getMusicVolume();
+        const startTime = Date.now();
+
+        const fadeInterval = setInterval(() => {
+            const elapsed = Date.now() - startTime;
+            const progress = Math.min(elapsed / (duration * 1000), 1);
+            audio.volume = targetVolume * progress;
+
+            if (progress >= 1) {
+                clearInterval(fadeInterval);
+                audio.volume = targetVolume;
+            }
+        }, 16);
     }
 
     function stopMusic() {
