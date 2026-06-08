@@ -124,8 +124,8 @@ function loadGame() {
     }
 }
 
-function resetGameProgress() {
-    const confirmed = window.confirm("Скинуть весь прогресс?");
+async function resetGameProgress() {
+    const confirmed = await showConfirmDialog("Скинуть прогресс?", "Это действие удалит весь ваш прогресс. Продолжить?");
     if (!confirmed) return;
 
     clearSave();
