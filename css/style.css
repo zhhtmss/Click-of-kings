@@ -349,6 +349,113 @@ body::-webkit-scrollbar,
     font-size: 18px;
 }
 
+/* MODAL */
+
+.modal {
+    position: fixed;
+    inset: 0;
+    z-index: 999;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    opacity: 1;
+    transition: opacity .2s ease;
+}
+
+.modal.hidden {
+    display: none;
+}
+
+.modal-overlay {
+    position: absolute;
+    inset: 0;
+    background: rgba(0, 0, 0, .6);
+    backdrop-filter: blur(2px);
+    animation: fadeIn .2s ease;
+}
+
+.modal-content {
+    position: relative;
+    z-index: 10;
+    background: var(--panel-strong);
+    border: 1px solid rgba(255, 255, 255, .2);
+    border-radius: 12px;
+    padding: 28px 32px;
+    max-width: 420px;
+    width: 90%;
+    box-shadow: 0 20px 60px rgba(0, 0, 0, .5);
+    backdrop-filter: blur(10px);
+    animation: slideUp .3s ease;
+}
+
+.modal-content h2 {
+    margin: 0 0 14px;
+    font-size: 22px;
+    color: var(--text);
+    text-align: center;
+}
+
+.modal-content p {
+    margin: 0 0 24px;
+    color: var(--muted);
+    text-align: center;
+    line-height: 1.5;
+    font-size: 15px;
+}
+
+.modal-buttons {
+    display: flex;
+    gap: 12px;
+    justify-content: center;
+}
+
+.modal-button {
+    padding: 10px 20px;
+    border: 1px solid rgba(255, 255, 255, .2);
+    border-radius: 8px;
+    cursor: pointer;
+    font-weight: 700;
+    font-size: 14px;
+    transition: transform .15s ease, opacity .15s ease, filter .15s ease;
+    flex: 1;
+    max-width: 140px;
+}
+
+.modal-button:hover:not(:disabled) {
+    transform: translateY(-2px);
+    filter: brightness(1.08);
+}
+
+.modal-button.ok {
+    color: #180a06;
+    background: linear-gradient(180deg, #f1a17a, #c25c40);
+}
+
+.modal-button.cancel {
+    color: var(--text);
+    background: linear-gradient(180deg, var(--accent-strong), var(--accent));
+}
+
+@keyframes slideUp {
+    from {
+        transform: translateY(40px);
+        opacity: 0;
+    }
+    to {
+        transform: translateY(0);
+        opacity: 1;
+    }
+}
+
+@keyframes fadeIn {
+    from {
+        opacity: 0;
+    }
+    to {
+        opacity: 1;
+    }
+}
+
 .upgrade p,
 .upgrade span {
     margin: 0;
