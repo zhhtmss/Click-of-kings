@@ -7,6 +7,53 @@ function formatNumber(value) {
     return Math.floor(number).toString();
 }
 
+// ===== MODAL DIALOG =====
+function showConfirmDialog(title, message) {
+    return new Promise((resolve) => {
+        const modal = document.getElementById("confirmDialog");
+        const titleEl = document.getElementById("confirmTitle");
+        const messageEl = document.getElementById("confirmMessage");
+        const cancelBtn = document.getElementById("confirmCancel");
+        const okBtn = document.getElementById("confirmOk");
+
+        if (!modal || !titleEl || !messageEl || !cancelBtn || !okBtn) {
+            resolve(false);
+            return;
+        }
+
+        titleEl.textContent = title;
+        messageEl.textContent = message;
+
+        const handleCancel = () => {
+            cleanup();
+            resolve(false);
+        };
+
+        const handleOk = () => {
+            cleanup();
+            resolve(true);
+        };
+
+        const cleanup = () => {
+            modal.classList.add("hidden");
+            cancelBtn.removeEventListener("click", handleCancel);
+            okBtn.removeEventListener("click", handleOk);
+            document.removeEventListener("keydown", handleKeydown);
+        };
+
+        const handleKeydown = (e) => {
+            if (e.key === "Escape") handleCancel();
+            if (e.key === "Enter") handleOk();
+        };
+
+        modal.classList.remove("hidden");
+        cancelBtn.addEventListener("click", handleCancel);
+        okBtn.addEventListener("click", handleOk);
+        document.addEventListener("keydown", handleKeydown);
+        okBtn.focus();
+    });
+}
+
 function initEraUI() {
     fixLegacyText();
     ensureEraPanel();
