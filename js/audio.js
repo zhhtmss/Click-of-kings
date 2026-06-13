@@ -71,6 +71,7 @@ const SoundManager = (() => {
 
         toggle.addEventListener("click", () => {
             enabled = !enabled;
+
             if (enabled) {
                 if (!unlocked) {
                     try {
@@ -79,12 +80,25 @@ const SoundManager = (() => {
                         console.warn("Could not unlock audio:", err);
                     }
                 }
+
                 if (unlocked) {
-                    playMusicForEra(currentEra);
+                    if (currentMusic) {
+                        currentMusic.volume = 0;
+                        currentMusic.play().catch(() => {});
+                        fadeInMusic(currentMusic, 0.35);
+                    } else {
+                        playMusicForEra(currentEra);
+                    }
                 }
-            } else {
-                stopMusic();
+            } else if (currentMusic) {
+                fadeOutMusic(currentMusic, 0.35);
+                setTimeout(() => {
+                    if (!enabled && currentMusic) {
+                        stopMusic();
+                    }
+                }, 350);
             }
+
             updateToggleText();
         });
     }
@@ -137,8 +151,10 @@ const SoundManager = (() => {
         if (!enabled || !nextMusic || !unlocked) return;
 
         if (currentMusic && currentMusic !== nextMusic) {
+            // Плавный переход между музыками
             fadeOutMusic(currentMusic, 0.5);
             
+            // Начинаем новую музыку с нулевой громкостью
             currentMusic = nextMusic;
             currentMusic.volume = 0;
             currentMusic.currentTime = 0;
@@ -150,6 +166,7 @@ const SoundManager = (() => {
                 });
             }
 
+            // Плавно увеличиваем громкость новой музыки
             fadeInMusic(currentMusic, 0.5);
         } else if (!currentMusic) {
             currentMusic = nextMusic;
