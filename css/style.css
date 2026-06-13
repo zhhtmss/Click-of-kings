@@ -201,7 +201,7 @@ body::-webkit-scrollbar,
 .volume-control input {
     width: 110px;
     accent-color: var(--accent-strong);
-    cursor: pointer;
+    cursor: url("../assets/images/cursor/pointer.png") 16 16, pointer;
 }
 
 /* CENTER */
