@@ -137,10 +137,8 @@ const SoundManager = (() => {
         if (!enabled || !nextMusic || !unlocked) return;
 
         if (currentMusic && currentMusic !== nextMusic) {
-            // Плавный переход между музыками
             fadeOutMusic(currentMusic, 0.5);
             
-            // Начинаем новую музыку с нулевой громкостью
             currentMusic = nextMusic;
             currentMusic.volume = 0;
             currentMusic.currentTime = 0;
@@ -152,7 +150,6 @@ const SoundManager = (() => {
                 });
             }
 
-            // Плавно увеличиваем громкость новой музыки
             fadeInMusic(currentMusic, 0.5);
         } else if (!currentMusic) {
             currentMusic = nextMusic;

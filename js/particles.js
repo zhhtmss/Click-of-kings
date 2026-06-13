@@ -18,7 +18,6 @@ const ParticleSystem = (() => {
         ctx = canvas.getContext("2d");
         resizeCanvas();
 
-        // Загружаем изображения частиц для каждой эры
         for (let i = 0; i < ERAS.length; i++) {
             const img = new Image();
             img.src = `./assets/images/items/era${i + 1}_particles.webp`;
@@ -55,14 +54,12 @@ const ParticleSystem = (() => {
     function animationLoop() {
         ctx.clearRect(0, 0, canvas.width, canvas.height);
 
-        // Обновляем и рисуем частицы
         for (let i = particles.length - 1; i >= 0; i--) {
             const p = particles[i];
 
-            // Обновляем позицию
             p.x += p.vx;
             p.y += p.vy;
-            p.vy += 0.15; // Гравитация
+            p.vy += 0.15; 
             p.life -= 1 / 60;
             p.rotation += p.rotationVelocity;
 
@@ -71,7 +68,6 @@ const ParticleSystem = (() => {
                 continue;
             }
 
-            // Рисуем частицу
             ctx.save();
             ctx.globalAlpha = Math.max(0, p.life / p.maxLife);
             ctx.translate(p.x, p.y);
@@ -80,7 +76,6 @@ const ParticleSystem = (() => {
             const image = particleImages.get(p.eraIndex);
             
             if (image && image.complete && image.width > 0) {
-                // Рисуем изображение с масштабированием
                 const w = image.width * p.scale;
                 const h = image.height * p.scale;
                 ctx.drawImage(image, -w / 2, -h / 2, w, h);
