@@ -11,6 +11,14 @@
     box-sizing: border-box;
 }
 
+html,
+body,
+#loader,
+#game,
+.modal {
+    cursor: url("../assets/images/cursor/cursor.png") 16 16, auto;
+}
+
 body {
     margin: 0;
     font-family: Arial, sans-serif;
@@ -169,7 +177,7 @@ body::-webkit-scrollbar,
     border: 1px solid rgba(255, 255, 255, .2);
     padding: 10px 16px;
     border-radius: 8px;
-    cursor: pointer;
+    cursor: url("../assets/images/cursor/pointer.png") 16 16, pointer;
     font-weight: 700;
     color: #101010;
     background: linear-gradient(180deg, var(--accent-strong), var(--accent));
@@ -264,7 +272,6 @@ body::-webkit-scrollbar,
     background: transparent;
     border: none;
     border-radius: 50%;
-    cursor: default;
     box-shadow: none;
     user-select: none;
     -webkit-user-select: none;
@@ -302,7 +309,7 @@ body::-webkit-scrollbar,
     -webkit-user-select: none;
     -webkit-user-drag: none;
     pointer-events: auto;
-    cursor: pointer;
+    cursor: url("../assets/images/cursor/pointer.png") 16 16, pointer;
     transition: transform .15s ease;
 }
 
@@ -423,7 +430,7 @@ body::-webkit-scrollbar,
     padding: 10px 20px;
     border: 1px solid rgba(255, 255, 255, .2);
     border-radius: 8px;
-    cursor: pointer;
+    cursor: url("../assets/images/cursor/pointer.png") 16 16, pointer;
     font-weight: 700;
     font-size: 14px;
     transition: transform .15s ease, opacity .15s ease, filter .15s ease;
@@ -479,7 +486,7 @@ body::-webkit-scrollbar,
 }
 
 .upgrade button:disabled {
-    cursor: not-allowed;
+    cursor: url("../assets/images/cursor/pointer.png") 16 16, not-allowed;
     opacity: .46;
     transform: none;
 }
